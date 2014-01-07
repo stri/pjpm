@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+var pjpm = require('../lib/index');
+var argv = require('optimist').argv;
+var $version = '0.0.1';
+
+// 获取path
+if(argv._[0] == 'path' || argv.p || argv.path){
+  console.log(pjpm.path);
+  return;
+}
+
+// 获取版本
+if(argv._[0] == 'version' || argv.version || argv.v){
+  console.log($version);
+  return;
+}
+
+// 生成文档
+if(argv._[0] == 'doc' || argv.d || argv.doc){
+  pjpm.doc();
+  console.log('Create doc success!');
+  return;
+}

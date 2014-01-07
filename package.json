@@ -1,0 +1,33 @@
+{
+	"name": "pjpm",
+	"description": "Pro.js package manage",
+	"author": {
+		"name": "Stri",
+		"email": "stri.vip@gmail.com",
+		"url": "http://weibo/stri"
+	},
+	"contributors": [{
+		"name": "Stri",
+		"email": "stri.vip@gmail.com"
+	}],
+	"bugs": {
+		"email": "stri.vip@gmail.com",
+		"web": "https://github.com/stri/pjpm/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/stri/pjpm.git"
+	},
+	"version": "0.0.1",
+	"main": "./index.js",
+	"bin": {
+		"pjpm": "./bin/pjpm"
+	},
+	"engines": {
+		"node": ">=0.4.0"
+	},
+	"dependencies": {
+		"dox": "0.4.4",
+		"optimist": "0.5.0"
+	}
+}
