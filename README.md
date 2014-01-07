@@ -1,5 +1,12 @@
 ### Pro.js Document（版本：0.0.1）
 =======
+#### 安装
+> npm install pjpm -g
+
+#### 使用
+> `pjpm -path`,`pjpm -v`
+
+=======
 * [builder]( pro_modules/builder) builder
 * [Callbacks]( pro_modules/Callbacks) jQuery's Callbacks
 * [channel]( pro_modules/channel) 用于模块间的通信
