@@ -1,11 +1,11 @@
 /**
- * 批量加载JS，CSS
+ * 批量加载
  * @authors Stri (stri.vip@gmail.com)
  * @date    2013-11-29 18:21:17
  * @version $Id$
  */
 define(function(module){
-	var loadScriptStyle = require('loadScriptStyle'),
+  var loadScriptStyle = require('loadScriptStyle'),
     URL = require('URL');
 
   /**
@@ -39,7 +39,7 @@ define(function(module){
       newAjax;
 
     newAjax = function(conf){
-      if(/linkstyle|script|js|css|/gi.test(conf.dataType)){
+      if($.inArray(conf.dataType,['linkstyle','script','js','css']) != -1){
         loadScriptStyle(conf);
       }else{
         baseAjax(conf);

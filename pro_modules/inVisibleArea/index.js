@@ -14,6 +14,7 @@ define(function(module){
     var node,
         box,
         isLastNode,
+        threshold = threshold || 0,
         offsetParent,
         xStatus = false,
         yStatus = false,
@@ -42,6 +43,7 @@ define(function(module){
     if(isHide){
       return false;
     }
+
 
     try{
       // 如果是根结点，则看scrollLeft

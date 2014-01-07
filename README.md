@@ -1,7 +1,7 @@
 ### Pro.js Document（版本：0.0.1）
 =======
 #### 安装
-> npm install pjpm -g
+		npm install pjpm -g
 
 #### 使用
 > `pjpm -path`,`pjpm -v`

@@ -6,7 +6,6 @@
  */
 define(function(module){
   var parseParam = require('parseParam'),
-    URL = require('URL'),
     Callbacks = require('Callbacks'),
     loaderScriptStyle = require('loaderScriptStyle'),
     inVisibleArea = require('inVisibleArea'),
@@ -156,27 +155,21 @@ define(function(module){
     function initWidget(widget){
       var conf = widget.getConfig(),
         fn = function(){
-          // 如果有执行初始化逻辑
-          if (conf.initialize){
-            var requires = $.isArray(conf.require) ? conf.require : [conf.require];
-            $.map(requires,function(key){
-              try{
-                var obj = require(path.resolve(conf.module.id,key));
-                if (obj.init){
-                  obj.init();
-                }
-              }catch(e){}
+          var requires = $.isArray(conf.require) ? conf.require : [conf.require],
+            key = requires[requires.length-1],
+            obj;
 
-              try{
-                conf.exports.call(obj,conf);
-              }catch(e){}
-            });
-          }else {
+            key = key.replace(/\.js$/gi,'');
             try{
-              conf.exports(conf);
-            }catch(e){
-            }
-          }
+              obj = require(path.resolve(conf.module.id,key));
+              if (conf.initialize && obj.init){
+                obj.init();
+              }
+            }catch(e){}
+
+            try{
+              conf.exports(conf,obj);
+            }catch(e){}
 
         };
 
@@ -236,13 +229,23 @@ define(function(module){
         // 添加到队列中
         $.map(require,function(url,index){
           var param = conf.requireParam[index],
-            fileType = path.extname(url) || 'js',
-            _url = url;
+            fileType = path.extname(url),
+            _url = !fileType ? [url,'js'].join('.') : url,
+            obj;
 
           if (!/^http/gi.test(_url)){
-            _url = path.resolve(conf.module.id,url);
-            _url = getSourceHost()[fileType]+_url;
+            _url = path.resolve(conf.module.id,_url);
+
+            // 如果已经存在，则不不在加载
+            if (obj = window.require(_url.replace(/\.js/gi,''))){
+              fn();
+              ajaxConf = [];
+              return;
+            }
+
+            _url = getSourceHost()[fileType || 'js']+_url;
           }
+
           ajaxConf.push({
             url: _url,
             data: param
@@ -250,7 +253,7 @@ define(function(module){
         })
 
         // 加载script
-        loaderScriptStyle(ajaxConf,{
+       ajaxConf.length && loaderScriptStyle(ajaxConf,{
           cache: true,
           isDepend: conf.isDepend,
           onSuccess: fn
@@ -300,6 +303,8 @@ define(function(module){
 
       var _stack = [].concat(widgetStack),
         widget;
+
+      // 如果平台不对，则不加载
 
       // 遍历进行监听并处理加载(可视区别不进行监听)
       while(widget = widgetStack.shift()){
