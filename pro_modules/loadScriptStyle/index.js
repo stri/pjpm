@@ -89,31 +89,39 @@ define([],function(module){
       * @param {Object} [Opts] [参数]
       *                        @param {String} [timeout] [时间]
 	    */
-	  function scriptObjOnload(node,Opts){
-	    var _UA = navigator.userAgent;
-	    if(/msie/.test(_UA.toLowerCase())){
-	      node['onreadystatechange'] = function(){
-	        if(node.readyState.toLowerCase() == 'loaded' || node.readyState.toLowerCase() == 'complete') {
-	          try{
-	            node['onreadystatechange'] = null;
-	          }catch(e){}
-	           
-	          try{
-	            Opts.success();
-	          }catch(e){}
-	        }
-	      };
-	    }else{
-	      node['onload'] = function(){
-	        try{
-	          Opts.success();
-	        }catch(e){}
-	      };
+	  function scriptObjOnload(node,Opts,timeout){
+      var timeout;
+      timeout = setTimeout(function(){
+        try{
+          Opts.error();
+        }catch(e){}
+      },timeout || 1000*20);
 
-	      node['onerror'] = function(){
-	        try{
-	          Opts.error();
-	        }catch(e){}
+      if ('onload' in node){
+        node['onload'] = function(){
+          try{
+            clearTimeout(timeout);
+            Opts.success();
+          }catch(e){}
+        };
+
+        node['onerror'] = function(){
+          try{
+            clearTimeout(timeout);
+            Opts.error();
+          }catch(e){}
+        };
+      }else {
+	      node['onreadystatechange'] = function(){
+	        if( /loaded|complete/gi.test(node.readyState.toLowerCase()) ) {
+            clearTimeout(timeout);
+	          try{
+              Opts.success();
+	          }catch(e){}
+            try{
+              node['onreadystatechange'] = null;
+            }catch(e){}
+	        }
 	      };
 	    }
 	  };
@@ -144,6 +152,13 @@ define([],function(module){
 	      return;
 	    }
 	    
+      // onload event
+      if ('onload' in node){
+        node.onload = function(){
+          fn();
+        };
+      }
+
 	    (function(){
 	      var _sheet = node.sheet,
 	           args = arguments;
@@ -154,7 +169,6 @@ define([],function(module){
 	        return;
 	      }
 	      
-	      // 参考：https://github.com/seajs/seajs/blob/master/src/util-request.js
 	      if(isOldWebKit && _sheet){
 	        fn();
 	        return;
@@ -202,7 +216,6 @@ define([],function(module){
       try{
       	scriptObjOnload(scriptObj,Opts);
       }catch(e){
-      	console.log(e.message);
       }
       headNode.appendChild(scriptObj);
     };
