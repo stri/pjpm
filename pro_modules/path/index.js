@@ -87,6 +87,7 @@ define(function(module) {
 		resolve: function(from) {
 			var re = [],
 				to,
+				args,
 				i = 0;
 			args = argToArray(arguments);
 			if (!/^\//gi.test(from) && this.root) {
