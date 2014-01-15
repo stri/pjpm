@@ -25,6 +25,9 @@ define(function(module){
 	    isBind = true;
 	    $(window).on('scroll',fn);
 	    $(window).on('resize',fn);
+	    $channel.add('window/scroll',function(){
+	    	fn();
+	    });
 	  }
 
 	  /**

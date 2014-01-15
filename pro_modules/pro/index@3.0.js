@@ -59,7 +59,7 @@
         try{
           callback.apply(win,[module]);
         }catch(e){
-          alert(id);
+          alert(id+e.message);
           throw new Error(id+':'+e.message);
         }
       };

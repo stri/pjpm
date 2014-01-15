@@ -5,7 +5,7 @@
  * @version $Id$
  */
 define(function(module) {
-	
+
 	/**
 	 * 把HTML串转成结点对象并返回其node-type节点
 	 * @param   {[type]}  html  [HTML串]
@@ -13,7 +13,7 @@ define(function(module) {
 	 *                             如果是flase，则为所有node-type的数组，默认为flase]
 	 * @return  {[type]}        [description]
 	 */
-	module.exports = function(html,isParse){
+	module.exports = function(html, isParse) {
 		var isHTML = typeof html == 'string',
 			_div = isHTML ? $('<div>') : html,
 			re = {},
@@ -24,14 +24,14 @@ define(function(module) {
 
 		// 列表
 		re.list = {};
-		$.map($('[node-type]',_div),function(node){
+		$.map($('[node-type]', _div), function(node) {
 			var key = $(node).attr('node-type');
-			if(key){
-				if(isParse){
-					if(!re.list[key]){
+			if (key) {
+				if (isParse) {
+					if (!re.list[key]) {
 						re.list[key] = node;
 					}
-				}else{
+				} else {
 					re.list[key] = re.list[key] || [];
 					re.list[key].push(node);
 				}
@@ -39,19 +39,16 @@ define(function(module) {
 		});
 
 		// 容器
-		if(isHTML){
+		if (isHTML) {
 			re.box = null;
-	    domBox = $(document.createDocumentFragment());
-	    _div = _div.get(0);
-	    while (_div.childNodes[0]) {
-	      domBox.append(_div.childNodes[0]);
-	    }
+			domBox = $(document.createDocumentFragment());
+			_div = _div.get(0);
+			while (_div.childNodes[0]) {
+				domBox.append(_div.childNodes[0]);
+			}
 		}
 
 		re.box = $(domBox)[0];
-
-    
-
 		return re;
 	};
 });

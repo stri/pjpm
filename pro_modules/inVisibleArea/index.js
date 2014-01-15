@@ -34,7 +34,7 @@ define(function(module){
     nodeOffset = node.offset();
     nodeX = nodeOffset.left;
     nodeY = nodeOffset.top;
-    isHide = (node.css('display') == 'none') || (nodeY == 0 && nodeX == 0);
+    isHide = (node.css('display') == 'none') || (node.outerWidth() == 0 && node.outerHeight() == 0);
     nodeY = !isHide && (nodeY - threshold);
     offsetParent = node.offsetParent();
     isLastNode = offsetParent[0] == (document.documentElement || document.body);
@@ -43,7 +43,6 @@ define(function(module){
     if(isHide){
       return false;
     }
-
 
     try{
       // 如果是根结点，则看scrollLeft
