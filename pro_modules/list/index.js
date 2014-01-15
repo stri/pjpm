@@ -101,6 +101,7 @@ define(function(module){
 
 			// fire event
 			that.evt.insert.fire($.extend(_conf,{
+				dom: newNode,
 				count: newCount || 0
 			}));
 		}
