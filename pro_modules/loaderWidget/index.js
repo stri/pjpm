@@ -237,6 +237,7 @@ define(function(module) {
             _hasFileType = staticHost.hasOwnProperty(_fileType),
             fileType = _hasFileType ? _fileType : 'js',
             _url = _hasFileType ? url : [url,fileType].join('.'),
+            _host = staticHost[fileType],
             obj;
 
           if (!/^http/gi.test(_url)) {
@@ -249,7 +250,13 @@ define(function(module) {
               return;
             }
 
-            _url = staticHost[fileType] + _url;
+            _url = path.normalize('/'+_url);
+
+            if (/\/$/.test(_host)){
+              _url = _host.replace(/\/$/gi,'')+_url;
+            }else {
+              _url = _host + _url;
+            }
           }
 
           ajaxConf.push({
